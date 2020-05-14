@@ -35,9 +35,9 @@ function setEventCallback(regexp: RegExp, regexpNoName: RegExp,
 setEventCallback(eventRegex.commandsRegex.start, eventRegex.commandsRegexNoName.start, (msg) => {
   if (msgTools.isAuthorized(msg) < 0) {
     // msgTools.sendUnauthorizedMessage(bot, msg);
-    msgTools.sendMessage(bot, msg, 'Works only inside @BhadooCloud (Bhadoo Cyber Systems, Model 101)', -1);
+    msgTools.sendMessage(bot, msg, 'Works only inside @punishercloud. Join @punishercloud to use this bot', -1);
   } else {
-    msgTools.sendMessage(bot, msg, 'All Systems Up and Running', -1);
+    msgTools.sendMessage(bot, msg, 'All Systems Up and Running.', -1);
   }
 });
 

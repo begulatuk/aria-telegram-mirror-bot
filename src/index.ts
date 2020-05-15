@@ -17,7 +17,7 @@ const bot = new TelegramBot(constants.TOKEN, { polling: true });
 var websocketOpened = false;
 var statusInterval: NodeJS.Timeout;
 var dlManager = dlm.DlManager.getInstance();
-var hosts = ['https://api.telegram.org'];
+
 initAria2();
 
 bot.on("polling_error", msg => console.error(msg.message));
@@ -34,10 +34,10 @@ function setEventCallback(regexp: RegExp, regexpNoName: RegExp,
 
 setEventCallback(eventRegex.commandsRegex.start, eventRegex.commandsRegexNoName.start, (msg) => {
   if (msgTools.isAuthorized(msg) < 0) {
-    // msgTools.sendUnauthorizedMessage(bot, msg);
-    msgTools.sendMessage(bot, msg, 'Works only inside @punishercloud. Join @punishercloud to use this bot', -1);
+     // msgTools.sendUnauthorizedMessage(bot, msg);
+    msgTools.sendMessage(bot, msg, 'Works only inside @punishercloud. Join @punishercloud to use this bot :)', -1);
   } else {
-    msgTools.sendMessage(bot, msg, 'All Systems Up and Running.', -1);
+    msgTools.sendMessage(bot, msg, 'All Systems Up and Running :)', -1);
   }
 });
 
@@ -93,7 +93,7 @@ setEventCallback(eventRegex.commandsRegex.mirrorStatus, eventRegex.commandsRegex
   if (msgTools.isAuthorized(msg) < 0) {
     msgTools.sendUnauthorizedMessage(bot, msg);
   } else {
-    sendStatusMessage(msg , true);
+    sendStatusMessage(msg);
   }
 });
 
@@ -289,19 +289,15 @@ function prepDownload(msg: TelegramBot.Message, match: string, isTar: boolean): 
       }, 1000);
     }
   });
-
 }
-
 /**
  * 
  * Added mirror function
  * send a added mirror msg --- added by @aryanvikash
  */
-
 function uriAdded(msg: TelegramBot.Message): any{
   msgTools.sendMessage(bot, msg, 'URI Added 😊,\nClick /mirrorstatus to get Status.', -1);
 }
-
 /**
  * Sends a single status message for all active and queued downloads.
  */
@@ -441,7 +437,7 @@ function ariaOnDownloadStart(gid: string, retry: number): void {
 
     if (!statusInterval) {
       statusInterval = setInterval(updateAllStatus,
-        constants.STATUS_UPDATE_INTERVAL_MS ? constants.STATUS_UPDATE_INTERVAL_MS :12000);
+        constants.STATUS_UPDATE_INTERVAL_MS ? constants.STATUS_UPDATE_INTERVAL_MS : 12000);
     }
   } else if (retry <= 8) {
     // OnDownloadStart probably got called before prepDownload's startDownload callback. Fairly common. Retry.
@@ -566,6 +562,7 @@ function initAria2(): void {
   ariaTools.setOnDownloadError(ariaOnDownloadError);
 }
 
+
 function driveUploadCompleteCallback(err: string, gid: string, url: string, filePath: string,
   fileName: string, fileSize: number, isFolder: boolean): void {
 
@@ -579,16 +576,16 @@ function driveUploadCompleteCallback(err: string, gid: string, url: string, file
     console.log(`${gid}: Uploaded `);
     if (fileSize) {
       var fileSizeStr = downloadUtils.formatSize(fileSize);
-      if(url.indexOf("/folders/") > -1){
+      	      if(url.indexOf("/folders/") > -1){
         var rawurl = constants.INDEX_DOMAIN + fileName + "/";
       }else{
         var rawurl = constants.INDEX_DOMAIN + fileName ;
       }
       var indexurl = encodeURI(rawurl) ;
-      finalMessage = `Drive Link: \n<a href='${url}'>${fileName}</a> (${fileSizeStr}) \n \nShare Link: \n<a href='${indexurl}'>${fileName}</a>`;
+      finalMessage = `Google Drive Link: \n<a href='${url}'>${fileName}</a> (${fileSizeStr}) \n \nDrive Index Link: \n<a href='${indexurl}'>${fileName}</a>`;
     } else {
-      finalMessage = `Drive Link: <a href='${url}'>${fileName}</a> \n \nShare Link: \n<a href='${indexurl}'>${fileName}</a>`;
+      finalMessage = `Google Drive Link: <a href='${url}'>${fileName}</a> \n \nDrive Index Link: \n<a href='${indexurl}'>${fileName}</a>`;
     }
     cleanupDownload(gid, finalMessage, url);
-    }
   }
+}
